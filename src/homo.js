@@ -1,14 +1,16 @@
 import _ from "lodash";
 
 module.exports = class homo {
+  kv = [];
   key = [];
   value = [];
   constructor(_kv) {
-    this.key = _.map(_kv, (_arr) => _arr[0]);
-    this.value = _.map(_kv, (_arr) => _arr[1]);
+    this.kv = _kv;
   }
   //生成Latex公式
   createLatex() {
+    this.key = _.map(this.kv, (_arr) => _arr[0]);
+    this.value = _.map(this.kv, (_arr) => _arr[1]);
     let _result = "";
     let that = this;
     _(this.value).forEach((value) => {
@@ -35,4 +37,24 @@ module.exports = class homo {
     return _result;
   }
   //检查数组是否符合处理规范
+  validate() {
+    return !Array.isArray(this.kv)
+      ? false
+      : _.isEmpty(this.kv)
+      ? false
+      : !this.validatorFx()
+      ? false
+      : this.validatorDiff();
+  }
+  //检测子数组是否含有两个元素
+  validatorFx() {
+    return _.every(this.kv, (value) => {
+      return _.size(value) == 2;
+    });
+  }
+  //检测key的值是否有重复
+  validatorDiff() {
+    let _key = _.map(this.kv, (_arr) => _arr[0]);
+    return _.isEqual(_key, _.uniq(_key));
+  }
 };
