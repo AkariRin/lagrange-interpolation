@@ -5,21 +5,23 @@
 </template>
 
 <script>
+import homo from "./homo";
+
 import "katex/dist/katex.min.css";
 
 export default {
   name: "App",
   data: () => ({
     kv: Array,
+    latex: String,
   }),
-  computed: {
-    //自动生成Latex公式
-    latex: {},
-  },
   watch: {
     kv: {
       handler(newValue) {
         localStorage.setItem("kv", JSON.stringify(newValue));
+        //同步更改Latex渲染内容
+        let _latex = new homo(this.kv);
+        this.latex = _latex.createLatex();
       },
       deep: true,
     },
