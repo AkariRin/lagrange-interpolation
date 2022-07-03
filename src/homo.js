@@ -10,28 +10,29 @@ module.exports = class homo {
   //生成Latex公式
   createLatex() {
     let _result = "";
-    let _x;
-    for (_x in this.value) {
-      _result = `${_result}+ ${_x} \\cdot \\frac{${this.frac()}}{${this.frac()}} \\\\`;
-    }
+    let that = this;
+    _(this.value).forEach((value) => {
+      _result = `${_result}+ ${value} \\cdot \\frac{${that.frac(
+        true,
+        value
+      )}}{${that.frac(false, value)}} \\\\ \n`;
+    });
     _result = _result.replace("+", "f(x) =");
-    _result = `\\begin{align}${_result}\\end{align}`;
+    _result = `\\begin{align} \n ${_result}\\end{align}`;
     return _result;
   }
   //分母与分子的生成函数
   //bool=true时为分子，反之为分母
-  frac(bool, n) {
+  frac(bool, _except_value) {
     let _result = "";
-    let _key = _.without(this.key, n);
-    let _x;
-    for (_x in _key) {
-      if (bool) {
-        _result = `${_result}(x-${_x})`;
-      } else {
-        _result = `${_result}(${n}-${_x})`;
-      }
-    }
+    let _except_key = this.key[_.indexOf(this.value, _except_value)];
+    let _key = _.without(this.key, _except_key);
+    _(_key).forEach((value) => {
+      bool
+        ? (_result = `${_result}(x-${value})`)
+        : (_result = `${_result}(${_except_key}-${value})`);
+    });
     return _result;
   }
-  //检查函数值是否重复
+  //检查数组是否符合处理规范
 };
