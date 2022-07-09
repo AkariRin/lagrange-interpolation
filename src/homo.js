@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-module.exports = class homo {
+export default class homo {
   kv = [];
   key = [];
   value = [];
@@ -57,4 +57,4 @@ module.exports = class homo {
     let _key = _.map(this.kv, (_arr) => _arr[0]);
     return _.isEqual(_key, _.uniq(_key));
   }
-};
+}
