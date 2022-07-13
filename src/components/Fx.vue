@@ -6,8 +6,8 @@
 export default {
   name: "Fx",
   data: () => ({
-    k: 0,
-    v: 0,
+    //td:组件内部修改props等待处理
+    k_v: Array,
   }),
   props: ["kv"],
 };
