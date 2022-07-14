@@ -15,18 +15,49 @@
         </v-row>
         <v-row>
           <v-col cols="1" offset="2">
-            <v-btn @click="add" color="blue" block dark>添加</v-btn>
+            <v-btn @click="add" color="blue" block dark>
+              <v-icon left>mdi-plus</v-icon>
+              添加
+            </v-btn>
           </v-col>
           <v-col cols="1">
-            <v-btn @click="clear" color="red" block dark>清空</v-btn>
+            <v-btn @click="clear" color="red" block dark>
+              <v-icon left>mdi-delete</v-icon>
+              清空
+            </v-btn>
           </v-col>
           <v-col cols="2" offset="4">
-            <v-btn block dark></v-btn>
+            <v-btn @click="showLatex = true" color="purple" block dark>
+              <v-icon left>mdi-function-variant</v-icon>
+              查看Latex公式
+            </v-btn>
+            <v-dialog v-model="showLatex" max-width="700" scrollable>
+              <v-card>
+                <v-card-title>Latex公式</v-card-title>
+                <v-card-text>{{ latex }}</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="blue" dark>
+                    <v-icon left>mdi-clipboard-text</v-icon>
+                    复制公式
+                  </v-btn>
+                  <v-btn @click="showLatex = false" color="red" dark>
+                    <v-icon left>mdi-close</v-icon>
+                    关闭
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
           </v-col>
         </v-row>
-        <v-row v-for="kv in kv" :key="kv[0]">
+        <v-row>
           <v-col cols="8" offset="2">
-            <Fx :initial-kv="kv"></Fx>
+            <v-card tile>
+              <v-card-title>编辑函数</v-card-title>
+              <v-card-text>
+                <Fx v-for="kv in kv" :key="kv[0]" :kv="kv"></Fx>
+              </v-card-text>
+            </v-card>
           </v-col>
         </v-row>
         <v-row>
@@ -39,7 +70,7 @@
       </v-container>
     </v-main>
     <v-footer padless>
-      <v-col cols="12" class="text-center">homo-functions - 梦清 </v-col>
+      <v-col cols="12" class="text-center">homo-functions - 梦清</v-col>
     </v-footer>
   </v-app>
 </template>
@@ -55,6 +86,7 @@ export default {
   name: "App",
   data: () => ({
     errorTip: false,
+    showLatex: false,
     kv: [
       [1, 1],
       [2, 2],

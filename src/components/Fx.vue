@@ -1,5 +1,8 @@
 <template>
-  <v-card>{{ kv[0] }} - {{ kv[1] }}</v-card>
+  <div>
+    <v-divider></v-divider>
+    {{ kv[0] }} - {{ kv[1] }}
+  </div>
 </template>
 
 <script>
