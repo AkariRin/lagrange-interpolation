@@ -20,7 +20,7 @@ export default class homo {
       )}}{${that.frac(false, value)}} \\\\ \n`;
     });
     _result = _result.replace("+", "f(x) =");
-    _result = `\\begin{align} \n ${_result}\\end{align}`;
+    _result = `\\begin{align*} \n ${_result}\\end{align*}`;
     return _result;
   }
   //分母与分子的生成函数
