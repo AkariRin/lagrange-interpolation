@@ -34,10 +34,12 @@
             <v-dialog v-model="showLatex" max-width="700" scrollable>
               <v-card>
                 <v-card-title>Latex公式</v-card-title>
-                <v-card-text>{{ latex }}</v-card-text>
+                <v-card-text>
+                  <v-textarea disabled :value="latex"></v-textarea>
+                </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="blue" dark>
+                  <v-btn color="blue" @click="copy" dark>
                     <v-icon left>mdi-clipboard-text</v-icon>
                     复制公式
                   </v-btn>
@@ -55,7 +57,7 @@
             <v-card tile>
               <v-card-title>编辑函数</v-card-title>
               <v-card-text>
-                <Fx v-for="kv in kv" :key="kv[0]" :kv="kv"></Fx>
+                <Fx v-for="kv in kv" :key="kv[0]" :init_kv="kv"></Fx>
               </v-card-text>
             </v-card>
           </v-col>
@@ -112,7 +114,7 @@ export default {
         });
       },
       deep: true,
-      //td:immediate无效，localstorage无效
+      //td:immediate无效,localstorage无效
       immediate: true,
     },
   },
@@ -124,6 +126,7 @@ export default {
     clear() {
       this.kv = [[1, 1]];
     },
+    copy() {},
   },
   beforeCreate() {
     //从本地加载kv数据
