@@ -6,6 +6,45 @@
     </v-app-bar>
     <v-main>
       <v-container>
+        <v-snackbar
+          v-model="copySuccess"
+          timeout="2000"
+          top
+          absolute
+          color="success"
+          transition="scroll-y-transition"
+        >
+          已复制Latex公式
+        </v-snackbar>
+        <v-snackbar
+          v-model="copyErr"
+          timeout="2000"
+          top
+          absolute
+          color="error"
+          transition="scroll-y-transition"
+        >
+          出现错误,无法复制公式
+        </v-snackbar>
+        <v-dialog v-model="showLatex" max-width="700" scrollable>
+          <v-card>
+            <v-card-title>Latex公式</v-card-title>
+            <v-card-text>
+              <v-textarea disabled :value="latex"></v-textarea>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue" @click="copy" dark>
+                <v-icon left>mdi-clipboard-text</v-icon>
+                复制公式
+              </v-btn>
+              <v-btn @click="showLatex = false" color="red" dark>
+                <v-icon left>mdi-close</v-icon>
+                关闭
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-row v-if="errorTip">
           <v-col cols="8" offset="2">
             <v-alert border="left" type="error">
@@ -31,25 +70,6 @@
               <v-icon left>mdi-function-variant</v-icon>
               查看Latex公式
             </v-btn>
-            <v-dialog v-model="showLatex" max-width="700" scrollable>
-              <v-card>
-                <v-card-title>Latex公式</v-card-title>
-                <v-card-text>
-                  <v-textarea disabled :value="latex"></v-textarea>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="blue" @click="copy" dark>
-                    <v-icon left>mdi-clipboard-text</v-icon>
-                    复制公式
-                  </v-btn>
-                  <v-btn @click="showLatex = false" color="red" dark>
-                    <v-icon left>mdi-close</v-icon>
-                    关闭
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
           </v-col>
         </v-row>
         <v-row>
@@ -88,6 +108,8 @@ export default {
   name: "App",
   data: () => ({
     errorTip: false,
+    copySuccess: false,
+    copyErr: false,
     showLatex: false,
     kv: [
       [1, 1],
@@ -126,7 +148,15 @@ export default {
     clear() {
       this.kv = [[1, 1]];
     },
-    copy() {},
+    async copy() {
+      try {
+        await navigator.clipboard.writeText(this.latex);
+        this.showLatex = false;
+        this.copySuccess = true;
+      } catch (e) {
+        this.copyErr = true;
+      }
+    },
   },
   beforeCreate() {
     //从本地加载kv数据
