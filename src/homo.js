@@ -5,7 +5,8 @@ export default class homo {
   key = [];
   value = [];
   constructor(_kv) {
-    this.kv = _kv;
+    //将Vue数据进行初步处理
+    this.kv = _.map(_kv, (_arr) => [_arr.k, _arr.v]);
   }
   //生成Latex公式
   createLatex() {
