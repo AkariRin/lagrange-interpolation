@@ -9,9 +9,12 @@ export default class homo {
   }
   //生成Latex公式
   createLatex() {
+    if (_.size(this.kv) == 1) {
+      return `\\begin{align*} \n f(x) = ${this.kv[0][1]} \n \\end{align*}`;
+    }
+    let _result = "";
     this.key = _.map(this.kv, (_arr) => _arr[0]);
     this.value = _.map(this.kv, (_arr) => _arr[1]);
-    let _result = "";
     let that = this;
     _(this.value).forEach((value) => {
       _result = `${_result}+ ${value} \\cdot \\frac{${that.frac(
