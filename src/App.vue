@@ -30,7 +30,7 @@
           <v-card>
             <v-card-title>Latex公式</v-card-title>
             <v-card-text>
-              <v-textarea disabled :value="latex"></v-textarea>
+              <v-textarea :value="latex"></v-textarea>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -74,18 +74,22 @@
         </v-row>
         <v-row>
           <v-col cols="8" offset="2">
+            <!--
             <v-card tile>
               <v-card-title>编辑函数</v-card-title>
               <v-card-text>
                 <Fx v-for="kv in kv" :key="kv[0]" :init_kv="kv"></Fx>
               </v-card-text>
             </v-card>
+            -->
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="8" offset="2">
-            <v-card>
-              <div id="latex"></div>
+            <v-card class="overflow-auto" max-height="500px" tile>
+              <v-card-text>
+                <div id="latex"></div>
+              </v-card-text>
             </v-card>
           </v-col>
         </v-row>
@@ -100,7 +104,7 @@
 <script>
 import _ from "lodash";
 import homo from "./homo";
-import Fx from "./components/Fx";
+//import Fx from "./components/Fx";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -121,7 +125,7 @@ export default {
     latex: String,
   }),
   components: {
-    Fx,
+    //Fx,
   },
   watch: {
     kv: {
@@ -130,7 +134,6 @@ export default {
         //同步更改Latex渲染内容
         let _latex = new homo(newValue);
         this.latex = _latex.createLatex();
-        //td:katex渲染出错
         katex.render(this.latex, document.getElementById("latex"), {
           displayMode: true,
         });
@@ -141,13 +144,16 @@ export default {
     },
   },
   methods: {
+    //添加
     add() {
       let _last = _.last(this.kv);
       this.kv.push([_last[0] + 1, _last[1] + 1]);
     },
+    //清除
     clear() {
-      this.kv = [[1, 1]];
+      this.kv = [_.head(this.kv)];
     },
+    //复制公式到剪贴板
     async copy() {
       try {
         await navigator.clipboard.writeText(this.latex);
