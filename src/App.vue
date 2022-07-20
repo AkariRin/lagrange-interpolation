@@ -74,14 +74,12 @@
         </v-row>
         <v-row>
           <v-col cols="8" offset="2">
-            <!--
-            <v-card tile>
-              <v-card-title>编辑函数</v-card-title>
-              <v-card-text>
-                <Fx v-for="kv in kv" :key="kv[0]" :init_kv="kv"></Fx>
-              </v-card-text>
-            </v-card>
-            -->
+            <v-data-table
+              :headers="headers"
+              :items="kv"
+              :items-per-page="10"
+              class="elevation-1"
+            ></v-data-table>
           </v-col>
         </v-row>
         <v-row>
@@ -104,7 +102,6 @@
 <script>
 import _ from "lodash";
 import homo from "./homo";
-//import Fx from "./components/Fx";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -116,17 +113,24 @@ export default {
     copyErr: false,
     showLatex: false,
     kv: [
-      [1, 1],
-      [2, 2],
-      [3, 3],
-      [4, 4],
-      [5, 114514],
+      { k: 1, v: 1 },
+      { k: 2, v: 2 },
+      { k: 3, v: 3 },
+      { k: 4, v: 4 },
+      { k: 5, v: 114514 },
+    ],
+    headers: [
+      {
+        text: "输入值",
+        value: "k",
+      },
+      {
+        text: "函数值",
+        value: "v",
+      },
     ],
     latex: String,
   }),
-  components: {
-    //Fx,
-  },
   watch: {
     kv: {
       handler(newValue) {
@@ -147,7 +151,7 @@ export default {
     //添加
     add() {
       let _last = _.last(this.kv);
-      this.kv.push([_last[0] + 1, _last[1] + 1]);
+      this.kv.push({ k: _last.k + 1, v: _last.v + 1 });
     },
     //清除
     clear() {
