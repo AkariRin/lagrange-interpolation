@@ -79,7 +79,11 @@
               :items="kv"
               :items-per-page="10"
               class="elevation-1"
-            ></v-data-table>
+            >
+              <template v-slot:item.actions="{ item }">
+                <v-btn @click="deleteItem(item)">D</v-btn>
+              </template>
+            </v-data-table>
           </v-col>
         </v-row>
         <v-row>
@@ -135,19 +139,20 @@ export default {
     kv: {
       handler(newValue) {
         localStorage.setItem("kv", JSON.stringify(newValue));
-        //同步更改Latex渲染内容
-        let _latex = new homo(newValue);
-        this.latex = _latex.createLatex();
-        katex.render(this.latex, document.getElementById("latex"), {
-          displayMode: true,
-        });
+        this.render(newValue);
       },
       deep: true,
-      //td:immediate无效,localstorage无效
-      immediate: true,
     },
   },
   methods: {
+    //渲染公式
+    render(x) {
+      let _latex = new homo(x);
+      this.latex = _latex.createLatex();
+      katex.render(this.latex, document.getElementById("latex"), {
+        displayMode: true,
+      });
+    },
     //添加
     add() {
       let _last = _.last(this.kv);
@@ -157,6 +162,7 @@ export default {
     clear() {
       this.kv = [_.head(this.kv)];
     },
+    deleteItem() {},
     //复制公式到剪贴板
     async copy() {
       try {
@@ -168,11 +174,11 @@ export default {
       }
     },
   },
-  beforeCreate() {
+  mounted() {
     //从本地加载kv数据
     localStorage.getItem("kv") == null
-      ? localStorage.setItem("kv", JSON.stringify(this.kv))
-      : (this.kv = localStorage.getItem("kv"));
+      ? this.render(this.kv)
+      : (this.kv = JSON.parse(localStorage.getItem("kv")));
   },
 };
 </script>
