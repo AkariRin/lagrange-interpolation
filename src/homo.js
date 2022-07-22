@@ -10,6 +10,11 @@ export default class homo {
   }
   //生成Latex公式
   createLatex() {
+    //当数组为空的情况
+    if (_.isEmpty(this.kv)) {
+      return "No \\quad data \\quad inputs";
+    }
+    //当数组只有一个值的情况
     if (_.size(this.kv) == 1) {
       return `\\begin{align*} \n f(x) = ${this.kv[0][1]} \n \\end{align*}`;
     }
@@ -43,8 +48,6 @@ export default class homo {
   //检查数组是否符合处理规范
   validate() {
     return !Array.isArray(this.kv)
-      ? false
-      : _.isEmpty(this.kv)
       ? false
       : !this.validatorFx()
       ? false
