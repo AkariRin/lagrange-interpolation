@@ -80,8 +80,38 @@
               :items-per-page="10"
               class="elevation-1"
             >
+              <!--编辑用对话框-->
+              <template v-slot:item.k="props">
+                <v-edit-dialog :return-value="props.item.k">
+                  {{ props.item.k }}
+                  <template v-slot:input>
+                    <v-text-field
+                      v-model.number="props.item.k"
+                      label="Edit"
+                      single-line
+                      counter
+                    ></v-text-field>
+                  </template>
+                </v-edit-dialog>
+              </template>
+              <template v-slot:item.v="props">
+                <v-edit-dialog :return-value="props.item.v">
+                  {{ props.item.v }}
+                  <template v-slot:input>
+                    <v-text-field
+                      v-model.number="props.item.v"
+                      label="Edit"
+                      single-line
+                      counter
+                    ></v-text-field>
+                  </template>
+                </v-edit-dialog>
+              </template>
+              <!--编辑用对话框 结束-->
               <template v-slot:item.actions="{ item }">
-                <v-btn @click="deleteItem(item)">D</v-btn>
+                <v-btn @click="deleteItem(item)" icon>
+                  <v-icon small>mdi-delete</v-icon>
+                </v-btn>
               </template>
             </v-data-table>
           </v-col>
@@ -132,6 +162,11 @@ export default {
         text: "函数值",
         value: "v",
       },
+      {
+        text: "操作",
+        value: "actions",
+        sortable: false,
+      },
     ],
     latex: String,
   }),
@@ -155,14 +190,21 @@ export default {
     },
     //添加
     add() {
-      let _last = _.last(this.kv);
-      this.kv.push({ k: _last.k + 1, v: _last.v + 1 });
+      if (_.isEmpty(this.kv)) {
+        this.kv.push({ k: 1, v: 1 });
+      } else {
+        let _last = _.last(this.kv);
+        this.kv.push({ k: _last.k + 1, v: _last.v + 1 });
+      }
     },
-    //清除
+    //清空
     clear() {
-      this.kv = [_.head(this.kv)];
+      this.kv = [];
     },
-    deleteItem() {},
+    //删除项
+    deleteItem(item) {
+      this.kv.splice(this.kv.indexOf(item), 1);
+    },
     //复制公式到剪贴板
     async copy() {
       try {
