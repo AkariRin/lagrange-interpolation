@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export default class homo {
+export default class interpolation {
   kv = [];
   key = [];
   value = [];

@@ -1,8 +1,11 @@
 <template>
   <v-app>
     <v-app-bar app flat color="red" dark>
-      <v-app-bar-title>恶臭函数生成器</v-app-bar-title>
+      <v-app-bar-title>拉格朗日插值函数生成器</v-app-bar-title>
       <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon @click="gh">mdi-github</v-icon>
+      </v-btn>
     </v-app-bar>
     <v-main>
       <v-container>
@@ -45,6 +48,15 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+        <v-row>
+          <v-col cols="8" offset="2">
+            <v-alert border="left" type="info">
+              这是一个用于生成拉格朗日插值函数的Latex公式的工具
+              <br />
+              点击数据即可编辑公式
+            </v-alert>
+          </v-col>
+        </v-row>
         <v-row v-if="errorTip">
           <v-col cols="8" offset="2">
             <v-alert border="left" type="error">
@@ -128,14 +140,14 @@
       </v-container>
     </v-main>
     <v-footer padless>
-      <v-col cols="12" class="text-center">homo-functions - 梦清</v-col>
+      <v-col cols="12" class="text-center">lagrange-interpolation | 梦清</v-col>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 import _ from "lodash";
-import homo from "./homo";
+import interpolation from "./interpolation";
 import katex from "katex";
 import "katex/dist/katex.min.css";
 
@@ -180,9 +192,16 @@ export default {
     },
   },
   methods: {
+    //打开GitHub
+    gh() {
+      window.open(
+        "https://github.com/AkariRin/lagrange-interpolation",
+        "_blank"
+      );
+    },
     //渲染公式
     render(x) {
-      let _latex = new homo(x);
+      let _latex = new interpolation(x);
       //验证
       if (!_latex.validate()) {
         this.errorTip = true;
