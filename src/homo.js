@@ -53,10 +53,10 @@ export default class homo {
       ? false
       : this.validatorDiff();
   }
-  //检测子数组是否含有两个元素
+  //检测子数组数据类型是否为有限数字
   validatorFx() {
     return _.every(this.kv, (value) => {
-      return _.size(value) == 2;
+      return _.isFinite(value[0]) && _.isFinite(value[1]);
     });
   }
   //检测key的值是否有重复

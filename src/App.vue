@@ -89,7 +89,7 @@
                       v-model.number="props.item.k"
                       label="Edit"
                       single-line
-                      counter
+                      autofocus
                     ></v-text-field>
                   </template>
                 </v-edit-dialog>
@@ -102,7 +102,7 @@
                       v-model.number="props.item.v"
                       label="Edit"
                       single-line
-                      counter
+                      autofocus
                     ></v-text-field>
                   </template>
                 </v-edit-dialog>
@@ -183,7 +183,15 @@ export default {
     //渲染公式
     render(x) {
       let _latex = new homo(x);
-      this.latex = _latex.createLatex();
+      //验证
+      if (!_latex.validate()) {
+        this.errorTip = true;
+        this.latex =
+          "An \\quad error \\quad occurred \\quad in \\quad rendering \\quad equation";
+      } else {
+        this.errorTip = false;
+        this.latex = _latex.createLatex();
+      }
       katex.render(this.latex, document.getElementById("latex"), {
         displayMode: true,
       });
