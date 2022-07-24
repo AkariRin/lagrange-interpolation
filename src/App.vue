@@ -3,13 +3,20 @@
     <v-app-bar app flat color="red" dark>
       <v-app-bar-title>拉格朗日插值函数生成器</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        href="https://github.com/AkariRin/lagrange-interpolation"
-        target="_blank"
-        icon
-      >
-        <v-icon>mdi-github</v-icon>
-      </v-btn>
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            href="https://github.com/AkariRin/lagrange-interpolation"
+            target="_blank"
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-github</v-icon>
+          </v-btn>
+        </template>
+        <span>在GitHub查看源代码</span>
+      </v-tooltip>
     </v-app-bar>
     <v-main>
       <v-container>
