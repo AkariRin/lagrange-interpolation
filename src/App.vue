@@ -131,6 +131,7 @@
         <v-row>
           <v-col cols="8" offset="2">
             <v-card class="overflow-auto" max-height="500px" tile>
+              <v-card-title>公式预览</v-card-title>
               <v-card-text>
                 <div id="latex"></div>
               </v-card-text>

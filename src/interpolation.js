@@ -39,9 +39,10 @@ export default class interpolation {
     let _except_key = this.key[_.indexOf(this.value, _except_value)];
     let _key = _.without(this.key, _except_key);
     _(_key).forEach((value) => {
+      value < 0 ? (value = `+${-value}`) : (value = `-${value}`);
       bool
-        ? (_result = `${_result}(x-${value})`)
-        : (_result = `${_result}(${_except_key}-${value})`);
+        ? (_result = `${_result}(x${value})`)
+        : (_result = `${_result}(${_except_key}${value})`);
     });
     return _result;
   }
