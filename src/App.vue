@@ -4,7 +4,8 @@
       <v-app-bar-title>拉格朗日插值函数生成器</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        href="https://github.com/AkariRin/lagrange-interpolation"
+        target="_blank"
         icon
       >
         <v-icon>mdi-github</v-icon>
