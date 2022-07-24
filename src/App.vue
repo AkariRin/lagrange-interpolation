@@ -3,8 +3,11 @@
     <v-app-bar app flat color="red" dark>
       <v-app-bar-title>拉格朗日插值函数生成器</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon @click="gh">mdi-github</v-icon>
+      <v-btn
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        icon
+      >
+        <v-icon>mdi-github</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>
@@ -193,13 +196,6 @@ export default {
     },
   },
   methods: {
-    //打开GitHub
-    gh() {
-      window.open(
-        "https://github.com/AkariRin/lagrange-interpolation",
-        "_blank"
-      );
-    },
     //渲染公式
     render(x) {
       let _latex = new interpolation(x);
