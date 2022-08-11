@@ -136,6 +136,9 @@
                   <v-icon small>mdi-delete</v-icon>
                 </v-btn>
               </template>
+              <template v-slot:no-data>
+                <v-btn @click="reset">生成模板数据</v-btn>
+              </template>
             </v-data-table>
           </v-col>
         </v-row>
@@ -246,6 +249,16 @@ export default {
       } catch (e) {
         this.copyErr = true;
       }
+    },
+    //无数据时的重置方法
+    reset() {
+      this.kv = [
+        { k: 1, v: 1 },
+        { k: 2, v: 2 },
+        { k: 3, v: 3 },
+        { k: 4, v: 4 },
+        { k: 5, v: 114514 },
+      ];
     },
   },
   mounted() {
