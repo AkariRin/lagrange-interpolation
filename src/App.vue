@@ -60,7 +60,7 @@
           </v-card>
         </v-dialog>
         <v-row>
-          <v-col cols="8" offset="2">
+          <v-col cols="12" md="10" lg="10" offset-md="1" offset-lg="1">
             <v-alert border="left" type="info">
               这是一个用于生成拉格朗日插值函数的Latex公式的工具
               <br />
@@ -69,39 +69,43 @@
           </v-col>
         </v-row>
         <v-row v-if="errorTip">
-          <v-col cols="8" offset="2">
+          <v-col cols="12">
             <v-alert border="left" type="error">
               检测到函数数据结构出现问题，请检查数据中是否有重复值或空值
             </v-alert>
           </v-col>
         </v-row>
-        <v-row>
-          <v-col cols="1" offset="2">
+        <v-row dense>
+          <v-col cols="6" md="1" lg="1" offset-md="1" offset-lg="1">
             <v-btn @click="add" color="blue" block dark>
               <v-icon left>mdi-plus</v-icon>
               添加
             </v-btn>
           </v-col>
-          <v-col cols="1">
+          <v-col cols="6" md="1" lg="1">
             <v-btn @click="clear" color="red" block dark>
               <v-icon left>mdi-delete</v-icon>
               清空
             </v-btn>
           </v-col>
-          <v-col cols="2" offset="4">
+          <v-spacer></v-spacer>
+          <v-col cols="12" md="2" lg="2">
             <v-btn @click="showLatex = true" color="purple" block dark>
               <v-icon left>mdi-function-variant</v-icon>
               查看Latex公式
             </v-btn>
           </v-col>
+          <v-col cols="0" md="1" lg="1"></v-col>
         </v-row>
         <v-row>
-          <v-col cols="8" offset="2">
+          <v-col cols="12" md="10" lg="10" offset-md="1" offset-lg="1">
             <v-data-table
               :headers="headers"
               :items="kv"
               :items-per-page="10"
+              mobile-breakpoint="0"
               class="elevation-1"
+              disable-filtering
             >
               <!--编辑用对话框-->
               <template v-slot:item.k="props">
@@ -143,7 +147,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="8" offset="2">
+          <v-col cols="12" md="10" lg="10" offset-md="1" offset-lg="1">
             <v-card class="overflow-auto" max-height="500px" tile>
               <v-card-title>公式预览</v-card-title>
               <v-card-text>
