@@ -69,7 +69,7 @@
           </v-col>
         </v-row>
         <v-row v-if="errorTip">
-          <v-col cols="12">
+          <v-col cols="12" md="10" offset-md="1">
             <v-alert border="left" type="error">
               检测到函数数据结构出现问题，请检查数据中是否有重复值或空值
             </v-alert>
