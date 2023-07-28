@@ -27,6 +27,8 @@ jobs:
       
       - name: Setup Node
         uses: actions/setup-node@v3
+        with:
+          node-version: 18
       
       - name: npm install
         if: env.NODE_PKG_MANAGER == 'npm'
