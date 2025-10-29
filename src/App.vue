@@ -1,16 +1,15 @@
 <template>
   <v-app>
-    <v-app-bar app flat color="red" dark>
+    <v-app-bar flat color="red" dark>
       <v-app-bar-title>拉格朗日插值函数生成器</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on, attrs }">
+      <v-tooltip location="bottom">
+        <template v-slot:activator="{ props }">
           <v-btn
             href="https://github.com/AkariRin/lagrange-interpolation"
             target="_blank"
             icon
-            v-bind="attrs"
-            v-on="on"
+            v-bind="props"
           >
             <v-icon>mdi-github</v-icon>
           </v-btn>
@@ -22,21 +21,17 @@
       <v-container>
         <v-snackbar
           v-model="copySuccess"
-          timeout="2000"
-          top
-          absolute
+          :timeout="2000"
+          location="top"
           color="success"
-          transition="scroll-y-transition"
         >
           已复制Latex公式
         </v-snackbar>
         <v-snackbar
           v-model="copyErr"
-          timeout="2000"
-          top
-          absolute
+          :timeout="2000"
+          location="top"
           color="error"
-          transition="scroll-y-transition"
         >
           出现错误,无法复制公式
         </v-snackbar>
@@ -44,16 +39,16 @@
           <v-card>
             <v-card-title>Latex公式</v-card-title>
             <v-card-text>
-              <v-textarea :value="latex"></v-textarea>
+              <v-textarea :value="latex" readonly></v-textarea>
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="blue" @click="copy" dark>
-                <v-icon left>mdi-clipboard-text</v-icon>
+                <v-icon start>mdi-clipboard-text</v-icon>
                 复制公式
               </v-btn>
               <v-btn @click="showLatex = false" color="red" dark>
-                <v-icon left>mdi-close</v-icon>
+                <v-icon start>mdi-close</v-icon>
                 关闭
               </v-btn>
             </v-card-actions>
@@ -61,7 +56,7 @@
         </v-dialog>
         <v-row>
           <v-col cols="12" md="10" offset-md="1">
-            <v-alert border="left" type="info">
+            <v-alert border="start" type="info">
               这是一个用于生成拉格朗日插值函数的Latex公式的工具
               <br />
               点击数据即可编辑公式
@@ -70,77 +65,79 @@
         </v-row>
         <v-row v-if="errorTip">
           <v-col cols="12" md="10" offset-md="1">
-            <v-alert border="left" type="error">
+            <v-alert border="start" type="error">
               检测到函数数据结构出现问题，请检查数据中是否有重复值或空值
             </v-alert>
           </v-col>
         </v-row>
         <v-row dense>
           <v-col cols="6" md="1" offset-md="1">
-            <v-btn @click="add" color="blue" block dark>
-              <v-icon left>mdi-plus</v-icon>
+            <v-btn @click="add" color="blue" block>
+              <v-icon start>mdi-plus</v-icon>
               添加
             </v-btn>
           </v-col>
           <v-col cols="6" md="1">
-            <v-btn @click="clear" color="red" block dark>
-              <v-icon left>mdi-delete</v-icon>
+            <v-btn @click="clear" color="red" block>
+              <v-icon start>mdi-delete</v-icon>
               清空
             </v-btn>
           </v-col>
           <v-spacer></v-spacer>
           <v-col cols="12" md="2">
-            <v-btn @click="showLatex = true" color="purple" block dark>
-              <v-icon left>mdi-function-variant</v-icon>
+            <v-btn @click="showLatex = true" color="purple" block>
+              <v-icon start>mdi-function-variant</v-icon>
               查看Latex公式
             </v-btn>
           </v-col>
           <v-col cols="0" md="1"></v-col>
         </v-row>
+        <v-dialog v-model="editDialog" max-width="500">
+          <v-card>
+            <v-card-title>编辑数据</v-card-title>
+            <v-card-text>
+              <v-text-field
+                v-model.number="editingItem.k"
+                label="输入值"
+                type="number"
+              ></v-text-field>
+              <v-text-field
+                v-model.number="editingItem.v"
+                label="函数值"
+                type="number"
+              ></v-text-field>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn @click="editDialog = false">取消</v-btn>
+              <v-btn color="blue" @click="saveEdit">保存</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-row>
           <v-col cols="12" md="10" offset-md="1">
             <v-data-table
               :headers="headers"
               :items="kv"
               :items-per-page="10"
-              mobile-breakpoint="0"
               class="elevation-1"
-              disable-filtering
             >
-              <!--编辑用对话框-->
-              <template v-slot:item.k="props">
-                <v-edit-dialog :return-value="props.item.k">
-                  {{ props.item.k }}
-                  <template v-slot:input>
-                    <v-text-field
-                      v-model.number="props.item.k"
-                      label="Edit"
-                      single-line
-                      autofocus
-                    ></v-text-field>
-                  </template>
-                </v-edit-dialog>
+              <template #[`item.k`]="{ item }">
+                <span @click="editItem(item)" style="cursor: pointer" class="text-blue">
+                  {{ item.k }}
+                </span>
               </template>
-              <template v-slot:item.v="props">
-                <v-edit-dialog :return-value="props.item.v">
-                  {{ props.item.v }}
-                  <template v-slot:input>
-                    <v-text-field
-                      v-model.number="props.item.v"
-                      label="Edit"
-                      single-line
-                      autofocus
-                    ></v-text-field>
-                  </template>
-                </v-edit-dialog>
+              <template #[`item.v`]="{ item }">
+                <span @click="editItem(item)" style="cursor: pointer" class="text-blue">
+                  {{ item.v }}
+                </span>
               </template>
-              <!--编辑用对话框 结束-->
-              <template v-slot:item.actions="{ item }">
-                <v-btn @click="deleteItem(item)" icon>
-                  <v-icon small>mdi-delete</v-icon>
+              <template #[`item.actions`]="{ item }">
+                <v-btn @click="deleteItem(item)" icon size="small">
+                  <v-icon>mdi-delete</v-icon>
                 </v-btn>
               </template>
-              <template v-slot:no-data>
+              <template #no-data>
                 <v-btn @click="reset">生成模板数据</v-btn>
               </template>
             </v-data-table>
@@ -148,7 +145,7 @@
         </v-row>
         <v-row>
           <v-col cols="12" md="10" offset-md="1">
-            <v-card class="overflow-auto" max-height="500px" tile>
+            <v-card class="overflow-auto" max-height="500px">
               <v-card-title>公式预览</v-card-title>
               <v-card-text>
                 <div id="latex"></div>
@@ -158,118 +155,145 @@
         </v-row>
       </v-container>
     </v-main>
-    <v-footer padless>
+    <v-footer>
       <v-col cols="12" class="text-center">lagrange-interpolation | 梦清</v-col>
     </v-footer>
   </v-app>
 </template>
 
-<script>
-import _ from "lodash";
-import interpolation from "./interpolation";
-import katex from "katex";
-import "katex/dist/katex.min.css";
+<script setup>
+import { ref, watch, onMounted } from 'vue';
+import _ from 'lodash';
+import interpolation from './interpolation';
+import katex from 'katex';
+import 'katex/dist/katex.min.css';
 
-export default {
-  name: "App",
-  data: () => ({
-    errorTip: false,
-    copySuccess: false,
-    copyErr: false,
-    showLatex: false,
-    kv: [
-      { k: 1, v: 1 },
-      { k: 2, v: 2 },
-      { k: 3, v: 3 },
-      { k: 4, v: 4 },
-      { k: 5, v: 114514 },
-    ],
-    headers: [
-      {
-        text: "输入值",
-        value: "k",
-      },
-      {
-        text: "函数值",
-        value: "v",
-      },
-      {
-        text: "操作",
-        value: "actions",
-        sortable: false,
-      },
-    ],
-    latex: String,
-  }),
-  watch: {
-    kv: {
-      handler(newValue) {
-        localStorage.setItem("kv", JSON.stringify(newValue));
-        this.render(newValue);
-      },
-      deep: true,
-    },
+const errorTip = ref(false);
+const copySuccess = ref(false);
+const copyErr = ref(false);
+const showLatex = ref(false);
+const latex = ref('');
+const editDialog = ref(false);
+const editingItem = ref({ k: 0, v: 0 });
+const editingIndex = ref(-1);
+
+const kv = ref([
+  { k: 1, v: 1 },
+  { k: 2, v: 2 },
+  { k: 3, v: 3 },
+  { k: 4, v: 4 },
+  { k: 5, v: 114514 },
+]);
+
+const headers = [
+  {
+    title: '输入值',
+    key: 'k',
   },
-  methods: {
-    //渲染公式
-    render(x) {
-      let _latex = new interpolation(x);
-      //验证
-      if (!_latex.validate()) {
-        this.errorTip = true;
-        this.latex =
-          "An \\quad error \\quad occurred \\quad in \\quad rendering \\quad equation";
-      } else {
-        this.errorTip = false;
-        this.latex = _latex.createLatex();
-      }
-      katex.render(this.latex, document.getElementById("latex"), {
-        displayMode: true,
-      });
-    },
-    //添加
-    add() {
-      if (_.isEmpty(this.kv)) {
-        this.kv.push({ k: 1, v: 1 });
-      } else {
-        let _last = _.last(this.kv);
-        this.kv.push({ k: _last.k + 1, v: _last.v + 1 });
-      }
-    },
-    //清空
-    clear() {
-      this.kv = [];
-    },
-    //删除项
-    deleteItem(item) {
-      this.kv.splice(this.kv.indexOf(item), 1);
-    },
-    //复制公式到剪贴板
-    async copy() {
-      try {
-        await navigator.clipboard.writeText(this.latex);
-        this.showLatex = false;
-        this.copySuccess = true;
-      } catch (e) {
-        this.copyErr = true;
-      }
-    },
-    //无数据时的重置方法
-    reset() {
-      this.kv = [
-        { k: 1, v: 1 },
-        { k: 2, v: 2 },
-        { k: 3, v: 3 },
-        { k: 4, v: 4 },
-        { k: 5, v: 114514 },
-      ];
-    },
+  {
+    title: '函数值',
+    key: 'v',
   },
-  mounted() {
-    //从本地加载kv数据
-    localStorage.getItem("kv") == null
-      ? this.render(this.kv)
-      : (this.kv = JSON.parse(localStorage.getItem("kv")));
+  {
+    title: '操作',
+    key: 'actions',
+    sortable: false,
   },
+];
+
+// 渲染公式
+const render = (x) => {
+  let _latex = new interpolation(x);
+  // 验证
+  if (!_latex.validate()) {
+    errorTip.value = true;
+    latex.value =
+      'An \\quad error \\quad occurred \\quad in \\quad rendering \\quad equation';
+  } else {
+    errorTip.value = false;
+    latex.value = _latex.createLatex();
+  }
+  katex.render(latex.value, document.getElementById('latex'), {
+    displayMode: true,
+  });
 };
+
+// 添加
+const add = () => {
+  if (_.isEmpty(kv.value)) {
+    kv.value.push({ k: 1, v: 1 });
+  } else {
+    let _last = _.last(kv.value);
+    kv.value.push({ k: _last.k + 1, v: _last.v + 1 });
+  }
+};
+
+// 清空
+const clear = () => {
+  kv.value = [];
+};
+
+// 删除项
+const deleteItem = (item) => {
+  kv.value.splice(kv.value.indexOf(item), 1);
+};
+
+// 编辑项
+const editItem = (item) => {
+  editingIndex.value = kv.value.indexOf(item);
+  editingItem.value = { ...item };
+  editDialog.value = true;
+};
+
+// 保存编辑
+const saveEdit = () => {
+  if (editingIndex.value !== -1) {
+    kv.value[editingIndex.value] = { ...editingItem.value };
+  }
+  editDialog.value = false;
+};
+
+// 复制公式到剪贴板
+const copy = async () => {
+  try {
+    await navigator.clipboard.writeText(latex.value);
+    showLatex.value = false;
+    copySuccess.value = true;
+  } catch {
+    copyErr.value = true;
+  }
+};
+
+// 无数据时的重置方法
+const reset = () => {
+  kv.value = [
+    { k: 1, v: 1 },
+    { k: 2, v: 2 },
+    { k: 3, v: 3 },
+    { k: 4, v: 4 },
+    { k: 5, v: 114514 },
+  ];
+};
+
+// 监听kv变化
+watch(
+  kv,
+  (newValue) => {
+    localStorage.setItem('kv', JSON.stringify(newValue));
+    render(newValue);
+  },
+  { deep: true }
+);
+
+// 挂载时从本地加载kv数据
+onMounted(() => {
+  const storedKv = localStorage.getItem('kv');
+  if (storedKv === null) {
+    render(kv.value);
+  } else {
+    kv.value = JSON.parse(storedKv);
+  }
+});
 </script>
+
+<style scoped></style>
