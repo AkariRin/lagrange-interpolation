@@ -163,7 +163,6 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import _ from 'lodash';
 import interpolation from './interpolation';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
@@ -220,10 +219,10 @@ const render = (x) => {
 
 // 添加
 const add = () => {
-  if (_.isEmpty(kv.value)) {
+  if (kv.value.length === 0) {
     kv.value.push({ k: 1, v: 1 });
   } else {
-    let _last = _.last(kv.value);
+    let _last = kv.value[kv.value.length - 1];
     kv.value.push({ k: _last.k + 1, v: _last.v + 1 });
   }
 };

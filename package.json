@@ -16,7 +16,6 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.8",
     "katex": "^0.16.25",
-    "lodash": "^4.17.21",
     "vue": "^3.5.22",
     "vuetify": "^3.10.8"
   },
