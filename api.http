@@ -1,0 +1,124 @@
+### 计算拉格朗日插值（3个点）
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "k": 0,
+      "v": 1
+    },
+    {
+      "k": 1,
+      "v": 2
+    },
+    {
+      "k": 2,
+      "v": 4
+    }
+  ]
+}
+
+### 计算拉格朗日插值（4个点）
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "k": -1,
+      "v": 1
+    },
+    {
+      "k": 0,
+      "v": 0
+    },
+    {
+      "k": 1,
+      "v": 1
+    },
+    {
+      "k": 2,
+      "v": 4
+    }
+  ]
+}
+
+### 计算拉格朗日插值（5个点）
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "k": 1,
+      "v": 1
+    },
+    {
+      "k": 2,
+      "v": 4
+    },
+    {
+      "k": 3,
+      "v": 9
+    },
+    {
+      "k": 4,
+      "v": 16
+    },
+    {
+      "k": 5,
+      "v": 25
+    }
+  ]
+}
+
+### 测试错误处理 - 重复的 k 值
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "k": 1,
+      "v": 2
+    },
+    {
+      "k": 1,
+      "v": 3
+    }
+  ]
+}
+
+### 测试错误处理 - 缺少 points 参数
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "data": []
+}
+
+### 测试错误处理 - GET 方法不支持
+GET https://lagrange-interpolation.rbq.dev/api
+
+### 单个数据点
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": [
+    {
+      "k": 0,
+      "v": 5
+    }
+  ]
+}
+
+### 空数据
+POST https://lagrange-interpolation.rbq.dev/api
+Content-Type: application/json
+
+{
+  "points": []
+}
+
