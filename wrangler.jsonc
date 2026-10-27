@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lagrange-interpolation",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-10-22",
+  "observability": {
+    "enabled": true,
+    "traces": {
+      "enabled": true,
+    },
+    "issues": {
+      "enabled": true,
+    },
+  },
+  "cache": {
+    "enabled": true,
+  },
+  "assets": {
+    "directory": "./dist",
+    // 单页应用，未命中的路径回退到 index.html
+    "not_found_handling": "single-page-application",
+    // 只有 /api 交给 Worker，其余请求由 assets 直接响应，
+    // 否则 Worker 会拦截所有未命中路径、导致 SPA 回退失效
+    "run_worker_first": ["/api"],
+  },
+  "workers_dev": false,
+  "preview_urls": false,
+}
